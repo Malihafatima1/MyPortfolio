@@ -19,7 +19,7 @@ function Contacts() {
 
     try {
       console.log("STEP 2: Sending request...");
-      const res=await axios.post("http://localhost:5000/send-sms", form);
+      const res=await axios.post("https://backend-3plw.onrender.com/send-sms", form);
 
      console.log("STEP 3: Response received", res.data);
       alert("Message sent successfully!");
