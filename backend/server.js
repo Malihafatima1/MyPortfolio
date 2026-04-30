@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const twilio = require("twilio");
 const Contact = require("./models/Contact");
@@ -31,14 +30,14 @@ const client = require("twilio")(
 );
 
 // ✅ Nodemailer
-const transporter = nodemailer.createTransport({
+/*const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
-
+*/
 app.get("/", (req, res) => {
   res.send("Backend working");
 });
@@ -46,6 +45,10 @@ app.get("/", (req, res) => {
 // ✅ MAIN API
 app.post("/send-sms", async (req, res) => {
   const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
 
   try {
     // 1️⃣ Save to DB
@@ -63,17 +66,18 @@ app.post("/send-sms", async (req, res) => {
     });
 
     // 3️⃣ Send Email
-    await transporter.sendMail({
+    /*await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: "New Portfolio Message",
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     });
+    */
 
-    res.send("Saved + SMS + Email sent");
+    res.send("Saved + SMS sent");
   } catch (err) {
     console.log("ERROR:", err);
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
