@@ -9,7 +9,7 @@ const Contact = require("./models/Contact");
 
 const app = express();
 app.use(cors({
-  origin: "*"
+  origin:"https://frontend-omega-silk-37.vercel.app"
 }));
 app.use(bodyParser.json());
 
